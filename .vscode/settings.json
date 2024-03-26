@@ -1,0 +1,11 @@
+{
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "cmake.generator": "Unix Makefiles",
+    "cmake.configureSettings": {
+        "WITH_ALL": true
+    }
+}

@@ -1,0 +1,43 @@
+name: Build & Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "main"
+
+env:
+  BUILD_DEPS: "build-essential cmake"
+  SRC_DIR: "."
+  BUILD_DIR: "${SRC_DIR}/build"
+  BUILD_TYPE: "Release"
+
+jobs:
+  ci:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:jammy
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: install deps
+        run: |
+          apt update && \
+          apt install -y ${BUILD_DEPS}
+
+      - name: configure
+        run: |
+          cmake \
+          --debug-output \
+          -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE} \
+          -DWITH_ALL:BOOL=ON \
+          -G "Unix Makefiles" \
+          -S ${SRC_DIR} -B ${BUILD_DIR}
+
+      - name: build tests
+        run: cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target all -j $(nproc --all)
+
+      - name: test
+        run: ctest --test-dir ${BUILD_DIR} -C ${BUILD_TYPE} -T test --output-on-failure -j $(nproc --all)

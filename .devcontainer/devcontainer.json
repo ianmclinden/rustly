@@ -1,0 +1,18 @@
+{
+    "name": "noble",
+    "image": "ubuntu:noble",
+    "containerEnv": {
+        "REQUIRED_PACKAGES": "git clang clang-format cmake nano"
+    },
+    "onCreateCommand": "apt-get -y update && export DEBIAN_FRONTEND=noninteractive && apt-get -y install ${REQUIRED_PACKAGES}",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools-extension-pack",
+                "Gruntfuggly.todo-tree"
+            ]
+        }
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/rustly,type=bind,consistency=cached",
+    "workspaceFolder": "/rustly"
+}
